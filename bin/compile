@@ -16,8 +16,10 @@ mkdir -p $VENDOR_DIR
 cd $VENDOR_DIR
 curl -L $DOWNLOAD_URL | tar xv -J
 
+mv $(ls -al | awk '{print $9}' | grep ffmpeg) ffmpeg
+
 echo "exporting PATH and LIBRARY_PATH" | indent
 PROFILE_PATH="$BUILD_DIR/.profile.d/ffmpeg.sh"
 mkdir -p $(dirname $PROFILE_PATH)
-echo 'export PATH="$PATH:$HOME/vendor/ffmpeg-git-20161231-64bit-static"' >> $PROFILE_PATH
-echo 'export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/vendor/ffmpeg-git-20161231-64bit-static"' >> $PROFILE_PATH
+echo 'export PATH="$PATH:$HOME/vendor/ffmpeg"' >> $PROFILE_PATH
+echo 'export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/vendor/ffmpeg"' >> $PROFILE_PATH
