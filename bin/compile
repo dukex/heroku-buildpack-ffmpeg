@@ -11,12 +11,12 @@ DOWNLOAD_URL="https://megafono.github.io/heroku-buildpack-ffmpeg/static/ffmpeg"
 echo "DOWNLOAD_URL = " $DOWNLOAD_URL | indent
 
 cd $BUILD_DIR
-mkdir -p $VENDOR_DIR
-cd $VENDOR_DIR
+mkdir -p $VENDOR_DIR/ffmpeg/bin
+cd $VENDOR_DIR/ffmpeg/bin
 curl -L $DOWNLOAD_URL -o ffmpeg
 
 echo "exporting PATH and LIBRARY_PATH" | indent
 PROFILE_PATH="$BUILD_DIR/.profile.d/ffmpeg.sh"
 mkdir -p $(dirname $PROFILE_PATH)
-echo 'export PATH="$PATH:$HOME/vendor/ffmpeg"' >> $PROFILE_PATH
+echo 'export PATH="$PATH:$HOME/vendor/ffmpeg/bin"' >> $PROFILE_PATH
 echo 'export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/vendor/ffmpeg"' >> $PROFILE_PATH
