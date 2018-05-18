@@ -9,17 +9,12 @@ testCompile()
   assertEquals "" "`cat ${STD_ERR}`"
 
   assertContains "-----> Downloading ffmpeg"  "`cat ${STD_OUT}`"
-  assertTrue "Should have cached ffmpeg `ls -la ${CACHE_DIR}`" "[ -f ${CACHE_DIR}/ffmpeg.tar.gz ]"
+  assertTrue "Should have cached ffmpeg `ls -la ${CACHE_DIR}`" "[ -f ${CACHE_DIR}/ffmpeg ]"
 
-  assertFileMD5 "5b289f11e9969e670d7828e58f018141" "${CACHE_DIR}/ffmpeg.tar.gz"
+  assertFileMD5 "baeb004575d58a7b186737a3be6d5f07" "${CACHE_DIR}/ffmpeg"
 
   assertContains "-----> Installing ffmpeg"  "`cat ${STD_OUT}`"
-  assertTrue "Should have installed ffmpeg in build dir: `ls -la ${BUILD_DIR}/vendor/ffmpeg/bin`" "[ -f ${BUILD_DIR}/vendor/ffmpeg/bin/ffmpeg ]"
-
-  assertContains "-----> Configuring ffmpeg"  "`cat ${STD_OUT}`"
-  assertTrue "Should have profile ffmpeg in build dir: `ls -la $BUILD_DIR/.profile.d/`" "[ -f $BUILD_DIR/.profile.d/ffmpeg.sh ]"
-  assertTrue "Should set ffmpeg to PATH: `cat $BUILD_DIR/.profile.d/ffmpeg.sh`", 'export PATH="$PATH:'"/app/vendor/ffmpeg/bin"'"'
-  assertTrue "Should set ffmpeg LD_LIBRARY_PATH: `cat $BUILD_DIR/.profile.d/ffmpeg.sh`", 'export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/app/vendor/ffmpeg"'
+  assertTrue "Should have installed ffmpeg in build dir: `ls -la ${BUILD_DIR}/bin`" "[ -f ${BUILD_DIR}/bin/ffmpeg ]"
 
   # Run again to ensure cache is used.
   rm -rf ${BUILD_DIR}/*

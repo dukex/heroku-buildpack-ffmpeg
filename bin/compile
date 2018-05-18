@@ -8,39 +8,25 @@ set -e
 BUILD_DIR=$1
 CACHE_DIR=$2
 
-BP_DIR=`cd $(dirname $0); cd ..; pwd`
-
 FFMPEG_DIST="ffmpeg"
-FFMPEG_DIST_TAR="${FFMPEG_DIST}.tar.gz"
-FFMPEG_HOME="${BUILD_DIR}/vendor/ffmpeg"
+FFMPEG_HOME="${BUILD_DIR}/bin"
 
 [ ! -d ${CACHE_DIR} ] && mkdir -p ${CACHE_DIR}
 
 # Download ffmpeg if not in cache
-if [ ! -f ${CACHE_DIR}/${FFMPEG_DIST_TAR} ]; then
-  FFMPEG_URL="https://megafono.github.io/heroku-buildpack-ffmpeg/static/${FFMPEG_DIST_TAR}"
+if [ ! -f ${CACHE_DIR}/${FFMPEG_DIST} ]; then
+  FFMPEG_URL="https://megafono.github.io/heroku-buildpack-ffmpeg/static/ffmpeg"
 
   echo -n "-----> Downloading ${FFMPEG_DIST}....."
-  curl --silent --location ${FFMPEG_URL} > ${CACHE_DIR}/${FFMPEG_DIST_TAR}
+  curl --silent --location ${FFMPEG_URL} > ${CACHE_DIR}/${FFMPEG_DIST}
 
   echo " done"
 fi
 
 echo -n "-----> Installing ${FFMPEG_DIST}...."
 
-# Untar ffmpeg
 cd ${BUILD_DIR}
-mkdir -p ${BUILD_DIR}/vendor
-tar -zxf ${CACHE_DIR}/${FFMPEG_DIST_TAR}
-mv target ${FFMPEG_HOME}
-chmod +x ${FFMPEG_HOME}/bin/ffmpeg
-echo " done"
-
-echo -n "-----> Configuring ${FFMPEG_DIST}...."
-
-PROFILE_PATH="$BUILD_DIR/.profile.d/${FFMPEG_DIST}.sh"
-mkdir -p $(dirname $PROFILE_PATH)
-echo 'export PATH="$PATH:'"${FFMPEG_HOME}/bin"'"' >> $PROFILE_PATH
-echo 'export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:'"${FFMPEG_HOME}"'"' >> $PROFILE_PATH
-
+mkdir -p ${FFMPEG_HOME}
+cp ${CACHE_DIR}/${FFMPEG_DIST} ${FFMPEG_HOME}/${FFMPEG_DIST}
+chmod +x ${FFMPEG_HOME}/${FFMPEG_DIST}
 echo " done"
